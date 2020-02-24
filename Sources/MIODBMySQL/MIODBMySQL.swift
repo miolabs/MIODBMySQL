@@ -1,0 +1,4 @@
+
+open class MIODBMySQL: MIODB {
+
+}
