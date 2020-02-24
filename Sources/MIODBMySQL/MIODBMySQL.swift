@@ -35,34 +35,58 @@ open class MIODBMySQL: MIODB {
     
     open override func executeQueryString(_ query:String) throws -> [Any]{
         
-//        let status = mysql_query(dbconnection, query.cString(using: .utf8))
-//        if status == nil {
-//            return []
-//        }
+        let status = mysql_query(dbconnection, query.cString(using: .utf8))
+        if status == 0 {
+            return []
+        }
 
-//        res = mysql_store_result(dbconnection); // Get the Result Set
-//
-//        if res == nil {
-//            return []
-//        }
+        let res = mysql_store_result(dbconnection); // Get the Result Set
+
+        if res == nil {
+            return []
+        }
         
         var items:[Any] = []
         
-/*
-            for row in 0..<PQntuples(res) {
-                var item = [String:Any]()
-                for col in 0..<PQnfields(res){
-                    if PQgetisnull(res, row, col) == 1 {continue}
-                    
-                    let colname = String(cString: PQfname(res, col))
-                    let type = PQftype(res, col)
-                    let value = PQgetvalue(res, row, col)
-                    
-                    item[colname] = convert(value: value!, withType: type)
-                }
-                items.append(item)
+        // Columns =
+        var columns = [String]()
+        var field:UnsafeMutablePointer<MYSQL_FIELD>? = mysql_fetch_field(res)
+        while(field != nil ) {
+            columns.append(String(cString: field!.pointee.name))
+            field = mysql_fetch_field(res)
+            //printf("%s ", field->name);
+        }
+        
+        //let num_fields = mysql_num_fields(res);
+        var row = mysql_fetch_row(res)
+        while row != nil {
+            var item = [String:Any]()
+            for colIndex in 0..<columns.count {
+                let colname = columns[colIndex]
+                //let type = PQftype(res, col)
+                let value = String(cString: row![colIndex]!)
+                
+                item[colname] = value //convert(value: value!, withType: type)
             }
-           */
+            items.append(item)
+            row = mysql_fetch_row(res)
+        }
+        
+        mysql_free_result(res);
+        
+//            for row in 0..<mysql_fetch_row(res) {
+//                var item = [String:Any]()
+//                for col in 0..<PQnfields(res){
+//                    if PQgetisnull(res, row, col) == 1 {continue}
+//
+//                    let colname = String(cString: PQfname(res, col))
+//                    let type = PQftype(res, col)
+//                    let value = PQgetvalue(res, row, col)
+//
+//                    item[colname] = convert(value: value!, withType: type)
+//                }
+//                items.append(item)
+//            }
                             
         return items
     }
