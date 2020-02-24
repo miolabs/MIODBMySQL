@@ -18,14 +18,9 @@ open class MIODBMySQL: MIODB {
         
         let conn = mysql_init(nil)
         
-        if mysql_real_connect(dbconnection, host!, user!, password!, database!, 0, nil, 0) != nil {
+        if mysql_real_connect(conn, host!, user!, password!, database!, 0, nil, 0) != nil {
             dbconnection = conn
         }
-    }
-    
-    open override func connect(scheme:String?){
-        connect()
-        changeScheme(scheme)
     }
     
     open override func disconnect() {
