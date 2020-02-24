@@ -1,0 +1,6 @@
+module CMySQL [system] {
+    header "shim.h"
+    link "mysqlclient"
+    export *
+}
+

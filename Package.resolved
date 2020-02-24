@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "MIODB",
+        "repositoryURL": "https://github.com/miolabs/MIODB.git",
+        "state": {
+          "branch": "master",
+          "revision": "f8336beba4d6b8eba7dfdba03dd2b44a20c66751",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
