@@ -10,6 +10,8 @@ open class MIODBMySQL: MIODB {
     let defaultDatabase = "public"
     
     var dbconnection:UnsafeMutablePointer<MYSQL>?
+    
+    public var includeTableNamesInColumnNames = false
         
     open override func connect(){
         if port == nil { port = defaultPort }
@@ -53,7 +55,12 @@ open class MIODBMySQL: MIODB {
         var types = [enum_field_types]()
         var field:UnsafeMutablePointer<MYSQL_FIELD>? = mysql_fetch_field(res)
         while(field != nil ) {
-            columns.append(String(cString: field!.pointee.name))
+            
+            var fieldName = String(cString: field!.pointee.name)
+            if includeTableNamesInColumnNames == true {
+                fieldName = String(cString: field!.pointee.table) + "." + fieldName
+            }
+            columns.append(fieldName)
             types.append(field!.pointee.type)
             field = mysql_fetch_field(res)
             //printf("%s ", field->name);
