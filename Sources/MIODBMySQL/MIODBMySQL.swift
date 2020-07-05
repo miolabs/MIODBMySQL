@@ -30,7 +30,7 @@ open class MIODBMySQL: MIODB {
         dbconnection = nil
     }
     
-    open override func executeQueryString(_ query:String) throws -> [Any]{
+    @discardableResult open override func executeQueryString(_ query:String) throws -> [[String : Any]]{
         
         if isInsideTransaction {
             pushQueryString(query)
@@ -101,7 +101,7 @@ open class MIODBMySQL: MIODB {
 //                items.append(item)
 //            }
                             
-        return items
+        return items as! [[String : Any]]
     }
     
     func convert(value:UnsafePointer<Int8>, withType type: enum_field_types, length: UInt) -> Any? {
