@@ -31,12 +31,7 @@ open class MIODBMySQL: MIODB {
     }
     
     @discardableResult open override func executeQueryString(_ query:String) throws -> [[String : Any?]]?{
-        
-        if isInsideTransaction {
-            pushQueryString(query)
-            return []
-        }
-        
+                
         let status = mysql_query(dbconnection, query.cString(using: .utf8))
         if status != 0 {
             return []
