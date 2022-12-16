@@ -182,6 +182,8 @@ open class MIODBMySQL: MIODB {
  };
  */
 
+
+// TODO: Is this used?
 extension MDBQuery {
     
     public func equal(field:String, mysqlHexString:String?) -> MDBQuery {
